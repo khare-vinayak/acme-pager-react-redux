@@ -1,43 +1,60 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import {loadEmployees,deleteEmployee} from './store.js';
 
-class Employee extends React.Component{
+class Employee extends Component{
        constructor(){
         super();
-        this.state={
-            employees:[]
-        };
+     
     }
-   async componentDidMount(){
-        const employees=(await axios.get("/api/employees/0")).data;
-        console.log(employees.rows)
-        this.setState({employees:employees.rows});
-
-    } 
-
+   async componentDidUpdate(prevProps){
+        if (this.props.location.pathname !== prevProps.location.pathname) {
+            const pageNum = this.props.location.pathname.slice(1)
+            console.log(pageNum)
+            this.props.load(pageNum);
+        }
+   } 
     render(){
-        const {employees} = this.state;
+        const {employees,destroy} = this.props;
+   
         return (
-            <div><h1> Acme Pager</h1>
-            
+            <div>
                 <table>
                     <tr>
                         <th>Employee Name</th>
                         <th>Title</th>
                         <th>Email</th>
                     </tr>
-                {employees.map(employee=>{
+                {employees ?employees.map(employee=>{
                     return(
                         <tr>
                             <td>{employee.firstName}  {employee.lastName}</td>
                             <td>{employee.title}</td>
                             <td>{employee.email}</td>
+                            <td> <button value={employee.id} onClick={(ev)=>destroy(ev.target.value)}>X</button></td>
                         </tr>
                     )
-                })}
+                }):''}
                 </table>
             </div>
         )
     }
 }
-export default Employee;
+const mapStateToProps = ({ employees }) => {
+    return {
+        employees: employees.rows
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        load: (pageNum) => {
+            dispatch(loadEmployees(pageNum));
+        },
+        destroy: (id) =>{
+            dispatch(deleteEmployee(id));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (Employee);

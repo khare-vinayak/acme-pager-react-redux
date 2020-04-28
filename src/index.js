@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Employee from './Employee';
+import { Provider } from 'react-redux';
+import App from './App.js';
+import store from './store';
 
 const rootEl = document.querySelector('#root');
 
-ReactDOM.render(<div><Employee /></div>, rootEl);
+ReactDOM.render(<Provider store={store}><App /></Provider>,  rootEl);

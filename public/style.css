@@ -20,3 +20,16 @@ table {
   tr:nth-child(even) {
     background-color: #dddddd;
   }
+  .page-nav {
+    margin-top: 20px;
+    min-width: 50%;
+    display: flex;
+    flex-direction: row;
+   /* border: 3px lavender solid;*/
+    /*border-radius: 1em;*/
+    padding: 0 0.5em;
+    justify-content: space-evenly;
+  }
+  .selected {
+    border: solid 1px black;
+  }

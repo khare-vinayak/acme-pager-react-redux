@@ -25,6 +25,14 @@ app.get('/api/employees/:page?', (req, res, next) => {
     return res.status(400).send({ error: 'Invalid page number' });
   }
 
+app.delete('/api/employees/:id',(req,res,next)=>{
+   Employee.findByPk(req.params.id)
+   .then (employee=>{
+     res.sendStatus(204);
+     employee.destroy;
+   })
+   .catch(next);
+  })
   const { limit, offset } = paginate(pageNum, resultsPerPage);
   Employee.findAndCountAll({
     limit,
